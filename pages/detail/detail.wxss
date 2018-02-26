@@ -152,8 +152,35 @@
   border-bottom: 1px solid #E9EAEB;
 }
 .deletefloor {
-  margin: 10px;
   text-align: center;
-  line-height: 20px;
   border-bottom: 1px solid #E9EAEB;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.action_floor {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0 10px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #E9EAEB;
+  margin: 0px 5px 0px 0px;
+}
+
+.action_floor_cellimage{
+  min-width: 40rpx;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 20rpx;
+  margin-right: 20rpx;
+}
+
+.reply_by_author {
+  color: #fff;
+  background: #ADD0FF;
+  font-weight: normal;
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-size: 12px;
+  margin-left: 5px;
 }

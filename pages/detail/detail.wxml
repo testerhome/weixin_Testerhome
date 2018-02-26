@@ -32,16 +32,20 @@
     <view class="detail-post-comment-title">评论</view>
     <view class="detail-post-comment-list">
       <block wx:for-items="{{replies}}" wx:for-item="item" wx:key="id">
-        <view wx:if="{{item.deleted === false}}" id="{{item.id}}" class="posts-item" bindtap="didSelectCell">
+        <view wx:if="{{item.action === null && item.deleted === false}}" id="{{item.id}}" class="posts-item">
           <image class="cellimage" mode="scaleToFill" src="{{item.user.avatar_url}}" />
           <view class="celllabel">
-            
             <template is="wxParse" data="{{wxParseData:repliesTemp[index]}}"/>
             <view class="cellrow">
-              <text class="celldetail">{{item.user.login}} </text>
-              <text class="celltip">{{item.created_at}}</text>
+              <text>{{item.user.login}} </text>
+              <text>{{item.created_at}}</text>
+              <text wx:if = "{{item.user.login === detail.user.login}}" class="reply_by_author">作者</text>
             </view>
           </view>
+        </view>
+        <view class="action_floor" wx:if="{{item.deleted === false && item.action !== null}}">
+          <image class="action_floor_cellimage" mode="scaleToFill" src="{{item.user.avatar_url}}" />
+          <template is="wxParse" data="{{wxParseData:repliesTemp[index]}}"/>
         </view>
         <view class="deletefloor" wx:if="{{item.deleted === true}}">本楼层已删除</view>
       </block>

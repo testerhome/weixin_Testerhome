@@ -90,12 +90,12 @@ Page({
               item.user.avatar_url = 'https://testerhome.com/' + item.user.avatar_url;
             }
             if (item.action === "excellent") {
-              item.body_html = '将本帖设为了精华贴';
+              item.body_html = item.user.login + '将本帖设为了精华贴';
             } else if (item.action === 'mention') {
 
-              item.body_html = '在 <' + (typeof (item.mention_topic) === 'undefined' ? '帖子已被删除' : item.mention_topic.title) + '> 中提及此帖';
+              item.body_html = item.user.login + '在 <' + (typeof (item.mention_topic) === 'undefined' ? '此话题已被删除' : item.mention_topic.title) + '> 中提及此帖';
             } else if (item.action === 'close') {
-              item.body_html = '关闭了讨论';
+              item.body_html = item.user.login + '关闭了讨论';
             } else {
               // item.body_html = item.body_html.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n');
             }
