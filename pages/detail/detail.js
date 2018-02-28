@@ -100,7 +100,7 @@ Page({
               // item.body_html = item.body_html.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n');
             }
             item.body_html = item.body_html.replace(/src=\"\//g, 'src=\"https://testerhome.com/');
-            item.body_html = item.body_html.replace(/<img.+? class=\"twemoji\">/g, "");
+            // item.body_html = item.body_html.replace(/<img.+? class=\"twemoji\">/g, "");
             return item;
           }))
           for (let i = 0; i < mReplies.length; i++) {
