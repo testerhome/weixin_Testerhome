@@ -169,7 +169,16 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    return {
+      title: this.data.detail.title,
+      path: '/pages/detail/detail?id=' + this.data.topicid,
+      success: function (res) {
+        // 转发成功
+      },
+      fail: function (res) {
+        // 转发失败
+      }
+    }
   },
 
   wxParseTagATap: function (e) {
