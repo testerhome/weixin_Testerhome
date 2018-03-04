@@ -1,0 +1,31 @@
+<import src="../../zanui-app/field/index.wxml" />
+<import src="../../zanui-app/toast/index.wxml" />
+<import src="../../zanui-app/tab/index.wxml" />
+<import src="../../zanui-app/toptips/index.wxml" />
+<import src="../template/template.wxml"/>
+<view class="container">
+  <view wx:if = "{{!isLogin}}" class='login-container'>
+    <!-- Field 基础用法 -->
+    <form bindsubmit="formSubmit">
+      <view class="zan-panel">
+        <template is="zan-field" data="{{ ...config.form.refreshToken }}"></template>
+        <view class="zan-btns">
+          <button class="zan-btn zan-btn--primary login-bt" formType="submit">登陆</button>
+        </view>
+      </view>
+    </form>
+  </view>
+
+
+  <view wx:if = "{{isLogin}}" class='userinfo-container'>
+    <image class="userinfo-avatar" mode="scaleToFill" src="https://testerhome.com/{{userinfo.avatar_url}}" />
+    <text class='userinfo-name'>{{userinfo.login}}</text>
+    <text class='userinfo-tag'>{{userinfo.tagline}}</text>
+    <template
+      is="zan-tab"
+      data="{{ ...tab1, componentId: 'tab1' }}"></template>
+    <template is="topicList" data="{{datas}}"/>
+  </view>
+  <template is="zan-toast" data="{{ zanToast }}"></template>
+  <template is="zan-toptips" data="{{ zanTopTips }}"></template>
+</view>

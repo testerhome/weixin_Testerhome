@@ -1,3 +1,4 @@
+var Api = require('./api.js')
 function formatTime(date) {
   var year = date.getFullYear()
   var month = date.getMonth() + 1
@@ -54,7 +55,73 @@ function getDateTimeStamp(dateStr){
   return  Date.parse(new Date(dateStr));
 }
 
+/**
+ * 用户认证
+ */
+function userAuth(refreshToken, cb) {
+  wx.request({
+    url: Api.getTokenByRefreshToken(),
+    method: 'POST',
+    data: {
+      client_id: '402e7adf',
+      grant_type: 'refresh_token',
+      client_secret: '030f48af465703f4df13fec7757d2c46aacf54f6d69c544549d7acc14ee45844',
+      refresh_token: refreshToken
+    },
+    header: {
+      'content-type': 'application/x-www-form-urlencoded' // 默认值
+    },
+    success: function (res) {
+      if (typeof(res.data.access_token) !== 'undefined') {
+        cb(null, res);
+      }else {
+        cb('refreshToken不可用', null)
+      }
+    }
+  });;
+}
+
+// function retryIfNotAuth(method, url, cb) {
+//   const self = this;
+//   wx.request({
+//     url: url,
+//     header: method === 'POST' ? {
+//       'content-type': 'application/json'} : {
+//       'content-type': 'application/x-www-form-urlencoded' // 默认值
+//     },
+//     success: function (result) {
+//       if (result.statusCode === 200) {
+//         cb(null, result);
+//       }else {
+//         self.userAuth(wx.getStorageSync('refreshToken'), (err, result) => {
+//           if (typeof (res.data.access_token) !== 'undefined') {
+//             retryIfNotAuth(method, url, cb);
+//           } else {
+//             cb('refreshToken不可用', null)
+//           }
+//         })
+//       }
+      
+//     }
+//   })
+// }
+
+
+/**
+ * 获取用户信息
+ */
+function getUserInfo(token, cb) {
+  wx.request({
+    url: Api.getUserInfo({ 'access_token': token }),
+    success: function (result) {
+      cb(null, result);
+    }
+  })
+}
+
 module.exports = {
+  getUserInfo: getUserInfo,
+  userAuth: userAuth,
   formatTime: formatTime,
   getDateDiff: getDateDiff,
   getDateTimeStamp: getDateTimeStamp

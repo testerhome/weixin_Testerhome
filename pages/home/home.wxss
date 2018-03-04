@@ -26,6 +26,7 @@
 .celllabel {
   flex-direction: column;
   margin-left: 10px;
+  text-align: left
 }
 .celltext{
   font-size: 18px;

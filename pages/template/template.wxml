@@ -1,5 +1,5 @@
 <template name="topicList">
-  <scroll-view style="height: 100vh; margin-top: {{listMargin}}px" scroll-y="true" bindscrolltolower="lower" bindscroll="scrolls">
+  <scroll-view style="height: 100vh; margin-top: {{listMargin}}px;"scroll-y="true" bindscrolltolower="lower">
     <swiper wx:if="{{type=='recent'}}" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" class="banners" interval="{{interval}}" duration="{{duration}}">
       <block wx:for="{{banner}}" wx:key="bannerId">
         <swiper-item class="banner">
@@ -19,7 +19,7 @@
               <text class="celltip">{{item.created_at}}</text>
             </view>
             <view class="cellrow">
-              <text class="celldetail">{{item.node_name}}</text>
+              <text class="celldetail">{{item.node_name === '' ? '暂无' : item.node_name}}</text>
               <view class="replycountBg">
                 <text>{{item.replies_count}}</text>
                 

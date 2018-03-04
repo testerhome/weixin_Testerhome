@@ -1,0 +1,56 @@
+/* pages/me.wxss */
+@import "./../home/home.wxss";
+.field__title--radius {
+  padding-bottom: 10px;
+}
+
+.popup-field-example--bottom {
+  width: 100%;
+  height: 150px;
+}
+
+.picker-view-example {
+  height: 120px;
+}
+
+.picker-view-column-example {
+  line-height: 50px;
+  text-align: center;
+}
+
+.login-container {
+  width: 100%;
+  padding: 200rpx 0;
+}
+
+.userinfo-container {
+  width:100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx 0;
+  position:fixed;
+  top: 0;
+  z-index: 1;
+}
+
+.userinfo-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 80rpx;
+  margin: 0 auto;
+}
+
+userinfo-name {
+  font-size: 14px;
+}
+
+.userinfo-tag {
+  font-size: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E9EAEB;
+}
+
+.login-bt {
+  background: #4342B6
+}
