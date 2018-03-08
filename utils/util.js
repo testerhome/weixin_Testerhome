@@ -73,12 +73,14 @@ function userAuth(refreshToken, cb) {
     },
     success: function (res) {
       if (typeof(res.data.access_token) !== 'undefined') {
+        wx.setStorageSync('token', res.data.access_token);
+        wx.setStorageSync('refreshToken', res.data.refresh_token);
         cb(null, res);
       }else {
         cb('refreshToken不可用', null)
       }
     }
-  });;
+  });
 }
 
 // function retryIfNotAuth(method, url, cb) {
@@ -106,6 +108,14 @@ function userAuth(refreshToken, cb) {
 //   })
 // }
 
+function isUserLogin(self) {
+  if (wx.getStorageSync('token') !== '') {
+    return true;
+  }else {
+    self.showZanTopTips('账号未登录，请登陆后操作');
+    return false;
+  }
+}
 
 /**
  * 获取用户信息
@@ -120,6 +130,7 @@ function getUserInfo(token, cb) {
 }
 
 module.exports = {
+  isUserLogin: isUserLogin,
   getUserInfo: getUserInfo,
   userAuth: userAuth,
   formatTime: formatTime,

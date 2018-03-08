@@ -103,8 +103,6 @@ Page(Object.assign({}, Zan.Field, Zan.Toast, Zan.Tab, Zan.TopTips, {
       util.userAuth(event.detail.value['form:login:refreshToken'], (err, result) => {
         self.clearZanToast();
         if (err === null) {
-          wx.setStorageSync('token', result.data.access_token);
-          wx.setStorageSync('refreshToken', result.data.refresh_token);
           util.getUserInfo(result.data.access_token, (err, result) => {
             self.setData({
               isLogin: true,

@@ -1,7 +1,8 @@
 var util = require('../../utils/util.js');
 var Api = require('../../utils/api.js');
+const Zan = require('../../zanui-app/index');
 var WxParse = require('../../wxParse/wxParse.js');
-Page({
+Page(Object.assign({}, Zan.TopTips, {
   data: {
     title: '话题详情',
     detail: {},
@@ -13,6 +14,10 @@ Page({
     flag_position: '0%',
     offset: 0,
     topicid: -1,
+    topicMeta: {
+      favorited: false,
+      liked: false,
+    }
   },
   onLoad: function (options) {
     wx.showLoading({
@@ -22,43 +27,35 @@ Page({
     this.fetchReplyData(options.id);
   },
 
-  onReady: function () {
-    
-    // for (let i = 0; i < this.data.replies.length; i++) {
-    //   WxParse.wxParse('reply' + i, 'md', this.data.replies[i].body_html, this);
-    //   if (i === this.data.replies.length - 1) {
-    //     WxParse.wxParseTemArray("replies", 'reply', this.data.replies.length, this);
-    //   }
-    // }
-  },
-
   fetchData: function (id) {
     var self = this;
     self.setData({
       topicid: id,
     });
+
     wx.request({
-      url: Api.getTopicByID(id),
+      url: Api.getTopicByID(id, { access_token: wx.getStorageSync('token') }),
       success: function (res) {
-        if(!res.data.error) {
+        if (!res.data.error) {
           res.data.topic.body = res.data.topic.body.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads');
           res.data.topic.created_at = util.getDateDiff(new Date(res.data.topic.created_at));
           if (res.data.topic.user.avatar_url.indexOf('testerhome') === -1) {
             res.data.topic.user.avatar_url = 'https://testerhome.com/' + res.data.topic.user.avatar_url;
           }
-          
-          
-        }else {
+
+
+        } else {
           res.data.topic = {}
           res.data.topic.body = res.data.message;
         }
         WxParse.wxParse('topicBody', 'md', res.data.topic.body, self, 5);
         self.setData({
-          detail: res.data.topic
+          detail: res.data.topic,
+          topicMeta: res.data.meta
         }, () => {
           wx.hideLoading();
         });
-        
+
       }
     });
 
@@ -83,7 +80,7 @@ Page({
     wx.request({
       url: Api.getTopicReplies(id, data),
       success: function (res) {
-        if(res.data.replies.length > 0) {
+        if (res.data.replies.length > 0) {
           var mReplies = self.data.replies.concat(res.data.replies.map(item => {
             item.created_at = util.getDateDiff(new Date(item.created_at));
             if (item.user.avatar_url.indexOf('testerhome') === -1) {
@@ -117,14 +114,14 @@ Page({
             if (data.offset !== 0) {
               wx.hideLoading();
             }
-            
+
           });
-        }else {
+        } else {
           if (data.offset !== 0) {
             wx.hideLoading();
           }
         }
-        
+
       }
     });
 
@@ -166,6 +163,82 @@ Page({
 
 
   /**
+   * 处理点赞事件
+   */
+  handleLike: function (e) {
+    const self = this;
+    if (util.isUserLogin(self)) {
+      wx.request({
+        url: Api.getTopicLikeUrl(this.data.topicid),
+        method: this.data.topicMeta.liked ? 'DELETE' : 'POST',
+        data: {
+          obj_type: 'topic',
+          obj_id: this.data.topicid,
+          access_token: wx.getStorageSync('token'),
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded' // 默认值
+        },
+        success: function (res) {
+          if (res.statusCode === 200) {
+            const topicMeta = self.data.topicMeta;
+            topicMeta.liked = !topicMeta.liked
+            self.setData({
+              topicMeta: topicMeta
+            })
+          } else if (res.statusCode === 401) {
+            util.userAuth(wx.getStorageSync('refreshToken'), (err, result) => {
+              if (err === null) {
+                self.handleCollect(e);
+              }
+            })
+          }
+        }
+      });
+
+    }
+  },
+
+  /**
+   * 处理收藏事件
+   */
+  handleCollect: function (e) {
+    const self = this;
+    if (util.isUserLogin(self)) {
+      wx.request({
+        url: Api.getTopicFavoriteUrl(this.data.topicid, this.data.topicMeta.favorited),
+        method: 'POST',
+        data: {
+          // obj_type: 'topic',
+          // obj_id: this.data.topicid,
+          access_token: wx.getStorageSync('token'),
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded' // 默认值
+        },
+        success: function (res) {
+          if (res.statusCode === 200) {
+            const topicMeta = self.data.topicMeta;
+            topicMeta.favorited = !topicMeta.favorited
+            self.setData({
+              topicMeta: topicMeta
+            })
+          } else if (res.statusCode === 401) {
+            util.userAuth(wx.getStorageSync('refreshToken'), (err, result) => {
+              if (err === null) {
+                self.handleCollect(e);
+              }
+            })
+          }
+        }
+      });
+
+    }
+
+  },
+
+
+  /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
@@ -184,4 +257,4 @@ Page({
   wxParseTagATap: function (e) {
     console.log(e);
   }
-})
+}))

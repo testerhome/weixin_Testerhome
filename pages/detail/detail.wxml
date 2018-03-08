@@ -1,55 +1,66 @@
-
 <!--detail.wxml-->
-
 <!--<view class="detail-main">-->
+<import src="../../zanui-app/toptips/index.wxml" />
 <import src="../../wxParse/wxParse.wxml" />
 <scroll-view style="height: 100vh" scroll-y="true" bindscrolltolower="lower" bindscroll="scrolls">
-<view class="detail-post">
-  <view class="detail-post-header">
-    <view class="detail-post-ava">
-      <view class="detail-post-title">{{ detail.title }}</view>
+  <view class="detail-post">
+    <view class="detail-post-header">
+      <view class="detail-post-ava">
+        <view class="detail-post-title">{{ detail.title }}</view>
 
-      <!--<view class="detail-post-avatar">-->
-      <image class="detail-post-avatar-img" src="{{detail.user.avatar_url}}"></image>
+        <!--<view class="detail-post-avatar">-->
+        <image class="detail-post-avatar-img" src="{{detail.user.avatar_url}}"></image>
 
-      <!--</view>-->
-    </view>
-    <view class="detail-post-node">
-      <view class="detail-node-name">{{ detail.node_name }}.</view>
-      <view class="detail-post-author-name">{{ detail.user.login }}</view>
-    </view>
-    <view class="detail-post-node">
-      <view class="detail-node-name">{{ detail.created_at }}.</view>
-      <view class="detail-post-author-name">{{ detail.hits }}次阅读</view>
-    </view>
-  </view>
-  <view class="detail-post-content" wx:if="{{content_hidden == false}}">
-    <template is="wxParse" data="{{wxParseData:topicBody.nodes}}" />
+        <!--</view>-->
+      </view>
+      <view class="detail-post-node">
+        <view class="detail-node-name">{{ detail.node_name }}.</view>
+        <view class="detail-post-author-name">{{ detail.user.login }}</view>
+      </view>
+      <view class="detail-post-node">
+        <view class="detail-node-name">{{ detail.created_at }}.</view>
+        <view class="detail-post-author-name">{{ detail.hits }}次阅读</view>
+      </view>
+      <view class="detail-post-node" >
+        <view class="detail-post-node" catchtap='handleCollect'>
+          <image class="detail-post-collect" src="{{topicMeta.favorited ? '../../images/collected.png' : '../../images/no_collected.png'}}"></image>
+          <text class='detail-post-collect-title'>{{topicMeta.favorited ? '已收藏': '收藏'}}</text>
+        </view>
+        <view class="detail-post-node" catchtap='handleLike'>
+          <image class="detail-post-collect" src="{{topicMeta.liked ? '../../images/praised.png' : '../../images/no_praise.png'}}"></image>
+          <text class='detail-post-collect-title'>{{topicMeta.liked ? '已点赞': '点赞'}}</text>
+        </view>
 
-    <!--<text class="content-info">{{ detail.body }}</text>-->
-  </view>
-  <view class="detail-post-comment">
-    <view class="detail-post-comment-title">评论</view>
-    <view class="detail-post-comment-list">
-      <block wx:for-items="{{replies}}" wx:for-item="item" wx:key="id">
-        <view wx:if="{{item.action === null && item.deleted === false}}" id="{{item.id}}" class="posts-item">
-          <image class="cellimage" mode="scaleToFill" src="{{item.user.avatar_url}}" />
-          <view class="celllabel">
-            <template is="wxParse" data="{{wxParseData:repliesTemp[index]}}"/>
-            <view class="cellrow">
-              <text>{{item.user.login}} </text>
-              <text>{{item.created_at}}</text>
-              <text wx:if = "{{item.user.login === detail.user.login}}" class="reply_by_author">作者</text>
+      </view>
+    </view>
+    <view class="detail-post-content" wx:if="{{content_hidden == false}}">
+      <template is="wxParse" data="{{wxParseData:topicBody.nodes}}" />
+
+      <!--<text class="content-info">{{ detail.body }}</text>-->
+    </view>
+    <view class="detail-post-comment">
+      <view class="detail-post-comment-title">评论</view>
+      <view class="detail-post-comment-list">
+        <block wx:for-items="{{replies}}" wx:for-item="item" wx:key="id">
+          <view wx:if="{{item.action === null && item.deleted === false}}" id="{{item.id}}" class="posts-item">
+            <image class="cellimage" mode="scaleToFill" src="{{item.user.avatar_url}}" />
+            <view class="celllabel">
+              <template is="wxParse" data="{{wxParseData:repliesTemp[index]}}" />
+              <view class="cellrow">
+                <text>{{item.user.login}} </text>
+                <text>{{item.created_at}}</text>
+                <text wx:if="{{item.user.login === detail.user.login}}" class="reply_by_author">作者</text>
+              </view>
             </view>
           </view>
-        </view>
-        <view class="action_floor" wx:if="{{item.deleted === false && item.action !== null}}">
-          <image class="action_floor_cellimage" mode="scaleToFill" src="{{item.user.avatar_url}}" />
-          <template is="wxParse" data="{{wxParseData:repliesTemp[index]}}"/>
-        </view>
-        <view class="deletefloor" wx:if="{{item.deleted === true}}">本楼层已删除</view>
-      </block>
+          <view class="action_floor" wx:if="{{item.deleted === false && item.action !== null}}">
+            <image class="action_floor_cellimage" mode="scaleToFill" src="{{item.user.avatar_url}}" />
+            <template is="wxParse" data="{{wxParseData:repliesTemp[index]}}" />
+          </view>
+          <view class="deletefloor" wx:if="{{item.deleted === true}}">本楼层已删除</view>
+        </block>
+      </view>
     </view>
   </view>
-</view>
+  <template is="zan-toptips" data="{{ zanTopTips }}"></template>
 </scroll-view>

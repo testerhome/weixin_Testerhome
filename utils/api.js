@@ -22,9 +22,9 @@ module.exports = {
         return HOST_URI + GET_USER_INFO + '?' + obj2uri(obj);
     },
     // 获取内容页数据
-    getTopicByID: function (id) {
+    getTopicByID: function (id, obj={}) {
         console.log(HOST_URI + GET_TOPIC_BY_ID + id + '.json');
-        return HOST_URI + GET_TOPIC_BY_ID + id + '.json';
+        return HOST_URI + GET_TOPIC_BY_ID + id + '.json?' + obj2uri(obj);
     },
     getTopicAds: function() {
         return HOST_URI + GET_TOPIC_ADS; 
@@ -41,6 +41,15 @@ module.exports = {
     getTopicReplies: function(id, obj) {
         console.log(HOST_URI + GET_TOPIC_BY_ID + id + GET_TOPIC_REPLIES + '?' + obj2uri(obj));
         return HOST_URI + GET_TOPIC_BY_ID + id + GET_TOPIC_REPLIES + '?' + obj2uri(obj);
+    },
+
+    getTopicLikeUrl: function() {
+      return HOST_URI + 'likes.json'
+    },
+
+    getTopicFavoriteUrl: function (id, isFavorite) {
+      console.log(HOST_URI + 'topics/' + id + isFavorite ? '/unfavorite.json' : '/favorite.json')
+      return HOST_URI + 'topics/' + id + (isFavorite ? '/unfavorite' : '/favorite.json')
     },
     
     getTokenByRefreshToken: function() {
