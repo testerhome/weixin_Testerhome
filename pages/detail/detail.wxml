@@ -2,6 +2,8 @@
 <!--<view class="detail-main">-->
 <import src="../../zanui-app/toptips/index.wxml" />
 <import src="../../wxParse/wxParse.wxml" />
+<import src="../../zanui-app/field/index.wxml" />
+<import src="../../zanui-app/toast/index.wxml" />
 <scroll-view style="height: 100vh" scroll-y="true" bindscrolltolower="lower" bindscroll="scrolls">
   <view class="detail-post">
     <view class="detail-post-header">
@@ -63,4 +65,14 @@
     </view>
   </view>
   <template is="zan-toptips" data="{{ zanTopTips }}"></template>
+  <template is="zan-toast" data="{{ zanToast }}"></template>
+  <view wx:if = "{{floatReplyVisible}}" class='detail-reply' bindtap='showReply'>
+    <image class='detail-reply-icon' src="../../images/reply.png">
+    </image>
+  </view>
+
+  <view wx:if="{{replyVisible}}" class='reply-edit-container'>
+    <textarea class="reply-textarea" auto-height fixed  show-confirm-bar="false" bindinput="bindInput" />
+    <button class="zan-btn zan-btn--primary" bindtap='sendReply'>发送</button>
+  </view>
 </scroll-view>

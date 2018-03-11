@@ -54,5 +54,9 @@ module.exports = {
     
     getTokenByRefreshToken: function() {
       return TOKEN
+    },
+
+    getReplyTopicUrl: function(id) {
+      return HOST_URI + 'topics/' + id + '/replies.json'
     }
 };

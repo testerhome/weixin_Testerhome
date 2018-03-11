@@ -29,22 +29,23 @@
   text-align: left
 }
 .celltext{
-  font-size: 18px;
-  margin-bottom: 16px;
+  color: #1F1F1F;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 .celldetail {
-  font-size: 16px;
+  font-size: 15px;
   max-height: 2em;
-  color: grey;
+  color: #1F1F1F;
   overflow:hidden;
 }
 .cellrow {
-    margin-top: 10px;
+    margin-top: 8px;
     flex-direction: row;
 }
 
 .celltip {
-    font-size: 14px;
+    font-size: 12px;
     position:absolute;
     margin-top: 5px;
     right:10px;

@@ -2,7 +2,7 @@ var util = require('../../utils/util.js');
 var Api = require('../../utils/api.js');
 const Zan = require('../../zanui-app/index');
 var WxParse = require('../../wxParse/wxParse.js');
-Page(Object.assign({}, Zan.TopTips, {
+Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
   data: {
     title: '话题详情',
     detail: {},
@@ -17,7 +17,10 @@ Page(Object.assign({}, Zan.TopTips, {
     topicMeta: {
       favorited: false,
       liked: false,
-    }
+    },
+    replyVisible: false,
+    floatReplyVisible: true,
+    replyContent: '',
   },
   onLoad: function (options) {
     wx.showLoading({
@@ -158,7 +161,32 @@ Page(Object.assign({}, Zan.TopTips, {
     }
 
   },
+
+  /**
+   * 这里滑动时 隐藏显示float
+   */
   scrolls: function (e) {
+    if (e.detail.deltaY < 0 && this.data.floatReplyVisible) {
+      this.setData({
+        floatReplyVisible: false
+      })
+    } else if (e.detail.deltaY > 0 && !this.data.floatReplyVisible) {
+      this.setData({
+        floatReplyVisible: true
+      })
+    }
+  },
+
+
+
+  /**
+   * 点击浮动的按钮时
+   */
+  showReply: function (e) {
+    this.setData({
+      replyVisible: true,
+      floatReplyVisible: false
+    })
   },
 
 
@@ -232,6 +260,64 @@ Page(Object.assign({}, Zan.TopTips, {
           }
         }
       });
+
+    }
+
+  },
+
+  bindInput(e){
+    this.setData({
+      replyContent: e.detail.value,
+    })
+  },
+
+  sendReply() {
+    const self = this;
+    if (util.isUserLogin(self)) {
+      var content = "<p>" + self.data.replyContent + "</p>";
+      content = content + "\n\n" + "<p>—— 来自TesterHome<a href=\"https://raw.githubusercontent.com/testerhome/weixin_Testerhome/master/screenshots/code.png\" target=\"_blank\">微信小程序</a></p>";
+
+      wx.request({
+        url: Api.getReplyTopicUrl(this.data.topicid),
+        method: 'POST',
+        data: {
+          body: content,
+          access_token: wx.getStorageSync('token'),
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded' // 默认值
+        },
+        success: function (res) {
+          if (res.statusCode === 200) {
+            // 如果回复成功就需要拉取最新的数据 这里需要做相应的判断
+            self.setData({
+              replyVisible: false,
+              replyContent: '',
+            })
+            self.showZanToast('回复成功');
+            if(self.data.replies / 20  === 0) {
+              self.fetchReplyData(self.data.topicid);
+            }else {
+              var replies = self.data.replies;
+              replies.slice(0, self.data.replies / 20 * 20)
+              self.setData({
+                replies: replies,
+              })
+              self.fetchReplyData(self.data.topicid, { offset: self.data.offset });
+            }
+            
+          } else if (res.statusCode === 401) {
+            util.userAuth(wx.getStorageSync('refreshToken'), (err, result) => {
+              if (err === null) {
+                self.sendReply();
+              }
+            })
+          }else {
+            self.showZanTopTips(res.data.message);
+          }
+        }
+      });
+
 
     }
 

@@ -15,7 +15,7 @@
           <view class="celllabel">
             <text class="celltext">{{item.title}}</text>
             <view class="cellrow">
-              <text class="celldetail">{{item.user.login}}</text>
+              <text class="celldetail">{{item.user.name === '' ? item.user.login : item.user.name}}</text>
               <text class="celltip">{{item.created_at}}</text>
             </view>
             <view class="cellrow">
