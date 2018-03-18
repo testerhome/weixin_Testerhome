@@ -195,6 +195,9 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
    */
   handleLike: function (e) {
     const self = this;
+    wx.showLoading({
+      title: '处理中',
+    })
     if (util.isUserLogin(self)) {
       wx.request({
         url: Api.getTopicLikeUrl(this.data.topicid),
@@ -208,6 +211,7 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
           'content-type': 'application/x-www-form-urlencoded' // 默认值
         },
         success: function (res) {
+          wx.hideLoading();
           if (res.statusCode === 200) {
             const topicMeta = self.data.topicMeta;
             topicMeta.liked = !topicMeta.liked
@@ -232,6 +236,9 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
    */
   handleCollect: function (e) {
     const self = this;
+    wx.showLoading({
+      title: '处理中',
+    })
     if (util.isUserLogin(self)) {
       wx.request({
         url: Api.getTopicFavoriteUrl(this.data.topicid, this.data.topicMeta.favorited),
@@ -245,6 +252,7 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
           'content-type': 'application/x-www-form-urlencoded' // 默认值
         },
         success: function (res) {
+          wx.hideLoading();
           if (res.statusCode === 200) {
             const topicMeta = self.data.topicMeta;
             topicMeta.favorited = !topicMeta.favorited

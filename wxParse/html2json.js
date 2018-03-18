@@ -220,24 +220,41 @@ function html2json(html, bindName) {
         },
         chars: function (text) {
             //debug(text);
-            var node = {
-                node: 'text',
-                text: text,
-                textArray:transEmojiStr(text)
-            };
             
-            if (bufArray.length === 0) {
-                node.index = index.toString()
-                index += 1
-                results.nodes.push(node);
-            } else {
-                var parent = bufArray[0];
-                if (parent.nodes === undefined) {
-                    parent.nodes = [];
+            if (text !== '\n') {
+              var node = {};
+              var textArrays = text.split('\n');
+              var arrayIndex = 0;
+              for (var item of textArrays) {
+                node = {
+                  node: 'text',
+                  text: item,
+                  textArray: transEmojiStr(item)
                 }
-                node.index = parent.index + '.' + parent.nodes.length
-                parent.nodes.push(node);
+                if (bufArray.length === 0) {
+                  node.index = index.toString()
+                  index += 1
+                  results.nodes.push(node);
+                } else {
+                  var parent = bufArray[0];
+                  if (parent.nodes === undefined) {
+                    parent.nodes = [];
+                  }
+                  node.index = parent.index + '.' + parent.nodes.length
+                  parent.nodes.push(node);
+                  if (arrayIndex !== textArrays.length - 1) {
+                    parent.nodes.push({
+                      node: 'element',
+                      tag: 'br',
+                      index: parent.index + '.' + parent.nodes.length,
+                      tagType: 'block'
+                    })
+                    arrayIndex += 1;
+                  }
+                }
+              }
             }
+            
         },
         comment: function (text) {
             //debug(text);

@@ -18,7 +18,7 @@
     line-height: 1.8;
 }
 view{
-    word-break:break-all; overflow:auto;
+    word-break:break-all;
 }
 .wxParse-inline{
     display: inline;
@@ -35,41 +35,63 @@ view{
 .wxParse-h6{ font-size:.75em; margin: 1.67em 0 }
 
 .wxParse-h1 {
-  font-size: 18px;
+  font-size: 22px !important;
   font-weight: 400;
   margin-bottom: .9em;
 }
 .wxParse-h2 {
-  font-size: 16px;
+  font-size: 20px !important;
   font-weight: 400;
   margin-bottom: .34em;
+  color: #111;
 }
 .wxParse-h3 {
   font-weight: 400;
-  font-size: 15px;
+  font-size: 18px !important;
   margin-bottom: .34em;
+  color: #333;
 }
 .wxParse-h4 {
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px !important;
   margin-bottom: .24em;
 }
 .wxParse-h5 {
   font-weight: 400;
-  font-size: 13px;
+  font-size: 15px !important;
   margin-bottom: .14em;
 }
 .wxParse-h6 {
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px !important;
   margin-bottom: .04em;
 }
 
-.wxParse-h1, .wxParse-h2, .wxParse-h3, .wxParse-h4, .wxParse-h5, .wxParse-h6, .wxParse-b, .wxParse-strong  { font-weight: bolder }
+.wxParse-h1, .wxParse-h2, .wxParse-h3, .wxParse-h4, .wxParse-h5, .wxParse-h6, .wxParse-b, .wxParse-strong  { 
+color: #555;
+font-weight: bolder;
+margin-bottom: 20px;
+border-bottom: 1px solid #eee;
+padding-bottom: 10px;
+}
 
 .wxParse-i,.wxParse-cite,.wxParse-em,.wxParse-var,.wxParse-address{font-style:italic}
-.wxParse-pre,.wxParse-tt,.wxParse-code,.wxParse-kbd,.wxParse-samp{font-family:monospace}
-.wxParse-pre{white-space:pre}
+.wxParse-
+,.wxParse-tt,.wxParse-code,.wxParse-kbd,.wxParse-samp{font-family:monospace}
+.wxParse-pre{
+    white-space: pre-wrap;
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 .wxParse-big{font-size:1.17em}
 .wxParse-small,.wxParse-sub,.wxParse-sup{font-size:.83em}
 .wxParse-sub{vertical-align:sub}
@@ -78,6 +100,11 @@ view{
 /*wxparse-自定义个性化的css样式*/
 /*增加video的css样式*/
 .wxParse-strong,.wxParse-s{display: inline}
+.wxParse-strong {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee
+
+}
 .wxParse-a{
     color: deepskyblue;
     word-break:break-all;
@@ -130,7 +157,7 @@ view{
     width: 5px;
     height: 5px;
     background-color: #333;
-    margin-right: 5px;
+    margin-right: 15px;
 }
 
 .wxParse-li-square{
