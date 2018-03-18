@@ -40,7 +40,7 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
       url: Api.getTopicByID(id, { access_token: wx.getStorageSync('token') }),
       success: function (res) {
         if (!res.data.error) {
-          res.data.topic.body = res.data.topic.body.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads');
+          res.data.topic.body = res.data.topic.body.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg');
           res.data.topic.created_at = util.getDateDiff(new Date(res.data.topic.created_at));
           if (res.data.topic.user.avatar_url.indexOf('testerhome') === -1) {
             res.data.topic.user.avatar_url = 'https://testerhome.com/' + res.data.topic.user.avatar_url;
