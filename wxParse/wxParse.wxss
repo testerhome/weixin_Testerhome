@@ -107,11 +107,6 @@ padding-bottom: 10px;
 /*wxparse-自定义个性化的css样式*/
 /*增加video的css样式*/
 .wxParse-strong,.wxParse-s{display: inline}
-.wxParse-strong {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee
-
-}
 .wxParse-a{
     color: deepskyblue;
     word-break:break-all;
