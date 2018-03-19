@@ -67,12 +67,19 @@ view{
   margin-bottom: .04em;
 }
 
-.wxParse-h1, .wxParse-h2, .wxParse-h3, .wxParse-h4, .wxParse-h5, .wxParse-h6, .wxParse-b, .wxParse-strong  { 
+.wxParse-h1, .wxParse-h2, .wxParse-h3, .wxParse-h4, .wxParse-h5, .wxParse-h6, .wxParse-b { 
 color: #555;
 font-weight: bolder;
 margin-bottom: 20px;
 border-bottom: 1px solid #eee;
 padding-bottom: 10px;
+}
+
+.wxParse-strong {
+  color: #000;
+  font-weight: bolder;
+  
+
 }
 
 .wxParse-i,.wxParse-cite,.wxParse-em,.wxParse-var,.wxParse-address{font-style:italic}

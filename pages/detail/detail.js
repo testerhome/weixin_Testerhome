@@ -40,7 +40,7 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
       url: Api.getTopicByID(id, { access_token: wx.getStorageSync('token') }),
       success: function (res) {
         if (!res.data.error) {
-          res.data.topic.body = res.data.topic.body.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg');
+          res.data.topic.body = res.data.topic.body.replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg').replace(/\n\s+```/g, '\n```');
           res.data.topic.created_at = util.getDateDiff(new Date(res.data.topic.created_at));
           if (res.data.topic.user.avatar_url.indexOf('testerhome') === -1) {
             res.data.topic.user.avatar_url = 'https://testerhome.com/' + res.data.topic.user.avatar_url;
@@ -90,21 +90,21 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
               item.user.avatar_url = 'https://testerhome.com/' + item.user.avatar_url;
             }
             if (item.action === "excellent") {
-              item.body_html = item.user.login + '将本帖设为了精华贴';
+              item.body = item.user.login + '将本帖设为了精华贴';
             } else if (item.action === 'mention') {
 
-              item.body_html = item.user.login + '在 <' + (typeof (item.mention_topic) === 'undefined' ? '此话题已被删除' : item.mention_topic.title) + '> 中提及此帖';
+              item.body = item.user.login + '在 <' + (typeof (item.mention_topic) === 'undefined' ? '此话题已被删除' : item.mention_topic.title) + '> 中提及此帖';
             } else if (item.action === 'close') {
-              item.body_html = item.user.login + '关闭了讨论';
+              item.body = item.user.login + '关闭了讨论';
             } else {
               // item.body_html = item.body_html.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n');
             }
-            item.body_html = item.body_html.replace(/src=\"\//g, 'src=\"https://testerhome.com/');
+            item.body = item.body.replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg').replace(/\n\s+```/g, '\n```');;
             // item.body_html = item.body_html.replace(/<img.+? class=\"twemoji\">/g, "");
             return item;
           }))
           for (let i = 0; i < mReplies.length; i++) {
-            WxParse.wxParse('reply' + i, 'md', mReplies[i].body_html, self);
+            WxParse.wxParse('reply' + i, 'md', mReplies[i].body, self);
             if (i === mReplies.length - 1) {
               WxParse.wxParseTemArray("repliesTemp", 'reply', mReplies.length, self)
             }
@@ -227,7 +227,8 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
           }
         }
       });
-
+    }else {
+      wx.hideLoading();
     }
   },
 
@@ -269,6 +270,8 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
         }
       });
 
+    }else {
+      wx.hideLoading();
     }
 
   },
