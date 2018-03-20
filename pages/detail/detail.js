@@ -25,7 +25,8 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
   onLoad: function (options) {
     wx.showLoading({
       title: '加载中',
-    })
+    });
+
     this.fetchData(options.id);
     this.fetchReplyData(options.id);
   },
@@ -100,7 +101,20 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
               // item.body_html = item.body_html.replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n');
             }
             item.body = item.body.replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg').replace(/\n\s+```/g, '\n```');;
-            // item.body_html = item.body_html.replace(/<img.+? class=\"twemoji\">/g, "");
+            // 此处有个麻烦的处理就是emoji表情的替换
+            // 这里先从item.body_html中提取出emoji的变量
+            var re = /\<img title=\"(.*?)\"\salt=.*? class=\"twemoji\"\>/g;
+            var arr = []
+            var emojiArr = [];
+            while(arr !== null) {
+              arr = re.exec(item.body_html);
+              // 由于这里的表情有可能是重复的 所以替换的时候需要剔除， 因为我们的替换用的是全局替换。
+              if (arr !== null && emojiArr.indexOf(arr[1]) === -1) {
+                item.body = item.body.replace(new RegExp(arr[1], 'g'), arr[0]);
+                emojiArr.push(arr[1]);
+              }
+            }
+            
             return item;
           }))
           for (let i = 0; i < mReplies.length; i++) {
