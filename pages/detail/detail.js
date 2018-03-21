@@ -26,7 +26,6 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
     wx.showLoading({
       title: '加载中',
     });
-
     this.fetchData(options.id);
     this.fetchReplyData(options.id);
   },
@@ -41,12 +40,11 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
       url: Api.getTopicByID(id, { access_token: wx.getStorageSync('token') }),
       success: function (res) {
         if (!res.data.error) {
-          res.data.topic.body = res.data.topic.body.replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg').replace(/\n\s+```/g, '\n```');
+          res.data.topic.body = res.data.topic.body.replace(/\n{3,}/g, '\n\n').replace(/\(\/uploads/g, '(https://testerhome.com/uploads').replace(/\(\/photo/g, '(https://testerhome.com/photo').replace(/large =.*x/g, 'large').replace(/\.jpg =.*x/g, '.jpg').replace(/\n\s+```/g, '\n```');
           res.data.topic.created_at = util.getDateDiff(new Date(res.data.topic.created_at));
           if (res.data.topic.user.avatar_url.indexOf('testerhome') === -1) {
             res.data.topic.user.avatar_url = 'https://testerhome.com/' + res.data.topic.user.avatar_url;
           }
-
 
         } else {
           res.data.topic = {}
@@ -108,9 +106,12 @@ Page(Object.assign({}, Zan.TopTips, Zan.Toast, {
             var emojiArr = [];
             while(arr !== null) {
               arr = re.exec(item.body_html);
+              
               // 由于这里的表情有可能是重复的 所以替换的时候需要剔除， 因为我们的替换用的是全局替换。
               if (arr !== null && emojiArr.indexOf(arr[1]) === -1) {
-                item.body = item.body.replace(new RegExp(arr[1], 'g'), arr[0]);
+                // 临时增加如下处理 主要是因为emoji中+对于正则来说是个特殊字符
+                var temp = arr[1].replace(/\+/g, '\\+')
+                item.body = item.body.replace(new RegExp(temp, 'g'), arr[0]);
                 emojiArr.push(arr[1]);
               }
             }
